@@ -6,6 +6,8 @@ import {
 import { JwtService } from '@nestjs/jwt';
 import { UserService } from '../user/user.service';
 import * as bcrypt from 'bcrypt';
+import { LoginDto } from './dto/login.dto';
+import { RegisterDto } from './dto/register.dto';
 
 @Injectable()
 export class AuthService {
@@ -14,7 +16,7 @@ export class AuthService {
     private readonly jwtService: JwtService
   ) {}
 
-  async register(dto: { email: string; password: string }) {
+  async register(dto: RegisterDto) {
     const existingUser = await this.userService.findByUsername(dto.email);
     if (existingUser) {
       throw new ConflictException('User already exists');
@@ -22,7 +24,7 @@ export class AuthService {
 
     const hashedPassword = await bcrypt.hash(dto.password, 10);
     const user = await this.userService.create({
-      email: dto.email,
+      ...RegisterDto,
       password: hashedPassword,
       favoriteProducts: [],
       cartProducts: [],
@@ -31,7 +33,7 @@ export class AuthService {
     return { user: simpleUser, ...this.generateTokens(user) };
   }
 
-  async login(dto: { email: string; password: string }) {
+  async login(dto: LoginDto) {
     const user = await this.userService.findByUsername(dto.email);
     if (!user || !(await bcrypt.compare(dto.password, user.password))) {
       throw new UnauthorizedException('Invalid credentials');

@@ -12,4 +12,14 @@ export class RegisterDto {
     description: 'Пароль нового пользователя',
   })
   password: string;
+
+  @ApiProperty({
+    example: 'Alex',
+  })
+  userName: string;
+
+  @ApiProperty({
+    example: '+64332566788',
+  })
+  phone: string;
 }
