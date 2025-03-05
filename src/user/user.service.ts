@@ -10,6 +10,10 @@ export class UserService {
     private usersRepository: Repository<User>
   ) {}
 
+  async getUsers() {
+    return await this.usersRepository.findAndCount()
+  }
+
   async create(user: Partial<User>): Promise<User> {
     return await this.usersRepository.save(user);
   }

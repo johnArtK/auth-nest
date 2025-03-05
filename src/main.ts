@@ -9,7 +9,7 @@ async function bootstrap() {
   app.use(cookieParser());
 
   app.enableCors({
-    origin: 'http://localhost:3000',
+    // origin: 'http://localhost:3000',
     credentials: true,
   });
 
@@ -17,7 +17,7 @@ async function bootstrap() {
     .setTitle('API документация')
     .setDescription('Описание API')
     .setVersion('1.0')
-    .addTag('example')
+    .addTag('auth-nest')
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);

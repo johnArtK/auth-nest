@@ -22,10 +22,20 @@ import {
 export class UserController {
   constructor(private userService: UserService) {}
 
+  @Get('')
+  @ApiOperation({ summary: 'Получить всех юзеров' })
+  @ApiResponse({ status: 200, description: 'Юзеры успешно возвращены.' })
+  async getUsers() {
+    return await this.userService.getUsers();
+  }
+
   @UseGuards(JwtAuthGuard)
   @Get('me')
   @ApiOperation({ summary: 'Получить данные профиля пользователя' })
-  @ApiResponse({ status: 200, description: 'Данные профиля пользователя успешно возвращены.' })
+  @ApiResponse({
+    status: 200,
+    description: 'Данные профиля пользователя успешно возвращены.',
+  })
   async getProfile(@Request() req) {
     const user = await this.userService.findById(req.user.userId);
     const { password, ...userData } = user;
@@ -44,11 +54,14 @@ export class UserController {
       required: ['productId'],
     },
   })
-  @ApiResponse({ status: 200, description: 'Избранные товары успешно обновлены.' })
+  @ApiResponse({
+    status: 200,
+    description: 'Избранные товары успешно обновлены.',
+  })
   async updateFavorites(@Request() req, @Body() body: { productId: number }) {
     const updatedUser = await this.userService.toggleFavorite(
       req.user.userId,
-      body.productId,
+      body.productId
     );
 
     return { favoriteProducts: updatedUser.favoriteProducts };
@@ -73,15 +86,18 @@ export class UserController {
       required: ['product'],
     },
   })
-  @ApiResponse({ status: 200, description: 'Товары в корзине успешно обновлены.' })
+  @ApiResponse({
+    status: 200,
+    description: 'Товары в корзине успешно обновлены.',
+  })
   async updateCart(
     @Request() req,
-    @Body() body: { product: { productId: number; quantity: number } },
+    @Body() body: { product: { productId: number; quantity: number } }
   ) {
     const updatedUser = await this.userService.toggleCartItem(
       req.user.userId,
       body.product.productId,
-      body.product.quantity,
+      body.product.quantity
     );
     return { cartProducts: updatedUser.cartProducts };
   }
