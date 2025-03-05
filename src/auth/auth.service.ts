@@ -23,12 +23,14 @@ export class AuthService {
     }
 
     const hashedPassword = await bcrypt.hash(dto.password, 10);
-    const user = await this.userService.create({
-      ...RegisterDto,
+    const newUser = {
+      ...dto,
       password: hashedPassword,
       favoriteProducts: [],
       cartProducts: [],
-    });
+    };
+    const user = await this.userService.create(newUser);
+
     const { password, ...simpleUser } = user;
     return { user: simpleUser, ...this.generateTokens(user) };
   }

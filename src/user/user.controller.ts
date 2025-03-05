@@ -15,6 +15,7 @@ import {
   ApiResponse,
   ApiBody,
 } from '@nestjs/swagger';
+import { RegisterDto } from 'src/auth/dto/register.dto';
 
 @ApiTags('user')
 @ApiBearerAuth()
@@ -25,6 +26,7 @@ export class UserController {
   @Get('')
   @ApiOperation({ summary: 'Получить всех юзеров' })
   @ApiResponse({ status: 200, description: 'Юзеры успешно возвращены.' })
+  @ApiBody({ type: RegisterDto })
   async getUsers() {
     return await this.userService.getUsers();
   }
