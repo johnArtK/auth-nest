@@ -25,8 +25,17 @@ export class AuthController {
     description: 'Возвращает access token и информацию о пользователе',
   })
   @ApiBody({ type: LoginDto })
-  async login(@Body() loginDto: LoginDto) {
-    return await this.authService.login(loginDto);
+  async login(@Body() loginDto: LoginDto, @Res() res: Response) {
+    const { accessToken, refreshToken, user } =
+      await this.authService.login(loginDto);
+
+    res.cookie('refreshToken', refreshToken, {
+      httpOnly: true,
+      secure: false,
+      sameSite: 'none',
+      maxAge: 7 * 24 * 60 * 60 * 1000,
+    });
+    return res.json({ accessToken, user });
   }
 
   @Post('register')
@@ -62,7 +71,7 @@ export class AuthController {
   async refresh(@Req() req: Request, @Res() res: Response) {
     const refreshToken = req.cookies['refreshToken'];
     if (!refreshToken) {
-      throw new UnauthorizedException('No refresh token in cookies');
+      throw new UnauthorizedException('не авторизован');
     }
 
     const {

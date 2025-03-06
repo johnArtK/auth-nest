@@ -43,7 +43,8 @@ export class AuthService {
     const { password, ...simpleUser } = user;
     return {
       user: simpleUser,
-      acessToken: this.generateTokens(user).accessToken,
+      accessToken: this.generateTokens(user).accessToken,
+      refreshToken: this.generateTokens(user).refreshToken,
     };
   }
 
