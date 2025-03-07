@@ -16,6 +16,7 @@ import {
   ApiBody,
 } from '@nestjs/swagger';
 import { RegisterDto } from 'src/auth/dto/register.dto';
+import { FavoriteProductIdDto } from './dto/favoriteProductId.dto';
 
 @ApiTags('user')
 @ApiBearerAuth()
@@ -60,7 +61,7 @@ export class UserController {
     status: 200,
     description: 'Избранные товары успешно обновлены.',
   })
-  async updateFavorites(@Request() req, @Body() body: { productId: number }) {
+  async updateFavorites(@Request() req, @Body() body: FavoriteProductIdDto) {
     const updatedUser = await this.userService.toggleFavorite(
       req.user.userId,
       body.productId
