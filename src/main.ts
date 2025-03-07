@@ -2,7 +2,7 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import * as cookieParser from 'cookie-parser';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
-import { ValidationPipe } from '@nestjs/common'
+import { ValidationPipe } from '@nestjs/common';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -10,15 +10,15 @@ async function bootstrap() {
   app.use(cookieParser());
 
   app.enableCors({
-    // origin: 'http://localhost:3000',
+    origin: true, //'http://localhost:5173',
     credentials: true,
   });
 
-  app.useGlobalPipes(new ValidationPipe({
-    whitelist: true,             // удаляет неописанные в DTO свойства
-    forbidNonWhitelisted: true,  // выбрасывает ошибку при наличии лишних свойств
-    transform: true,             // преобразует входящие данные к типам, указанным в DTO
-  }));
+  // app.useGlobalPipes(new ValidationPipe({
+  //   whitelist: true,             // удаляет неописанные в DTO свойства
+  //   forbidNonWhitelisted: true,  // выбрасывает ошибку при наличии лишних свойств
+  //   transform: true,             // преобразует входящие данные к типам, указанным в DTO
+  // }));
 
   const config = new DocumentBuilder()
     .setTitle('API документация')
